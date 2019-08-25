@@ -1,0 +1,6 @@
+#全局环境
+spring:
+  thymeleaf:
+    mode: HTML
+  profiles:
+    active: dev

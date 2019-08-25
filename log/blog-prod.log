@@ -1,0 +1,5 @@
+2019-08-24 21:41:34.938  INFO 3184 --- [restartedMain] com.mzt.BlogApplication                  : Starting BlogApplication on DESKTOP-99AIR5R with PID 3184 (D:\Idea_workspace\FullStack\SpringBoot\blog\target\classes started by 29988 in D:\Idea_workspace\FullStack\SpringBoot\blog)
+2019-08-24 21:41:34.941  INFO 3184 --- [restartedMain] com.mzt.BlogApplication                  : The following profiles are active: prod
+2019-08-24 21:41:37.791  WARN 3184 --- [restartedMain] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-08-24 21:41:37.867  WARN 3184 --- [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2019-08-24 21:41:38.066  INFO 3184 --- [restartedMain] com.mzt.BlogApplication                  : Started BlogApplication in 3.784 seconds (JVM running for 5.344)
