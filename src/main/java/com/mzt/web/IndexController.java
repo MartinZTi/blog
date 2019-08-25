@@ -22,14 +22,19 @@ public class IndexController {
 //            throw new NotFoundException("博客不存在");
 //        }
 
-        return "index";
+        return "blog";
     }
 
     /*测试切面*/
-    @RequestMapping("/{id}/{name}")
+/*    @RequestMapping("/{id}/{name}")
     public String testAOP(@PathVariable Integer id, @PathVariable String name){
         System.out.println("----------index-----------");
         return "index";
+    }*/
+
+    @RequestMapping("/blog")
+    public String blog(){
+        return "blog";
     }
 
 

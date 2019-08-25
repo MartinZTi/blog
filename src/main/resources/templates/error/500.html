@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>500</title>
+    <link rel="stylesheet" href="static/css/500error2.css" th:href="@{/css/500error2.css}">
 </head>
 <body>
-<h1>500</h1>
+
+<!--中间内容-->
+<div id="bd">
+<!--    style="background-image: url(http://movietvtechgeeks.com/wp-content/uploads/2015/05/most-common-server-problems.jpg);"  OK-->
+
+<!--    background: url("../images/server-problems.jpg") no-repeat;-->
+        <div id='oopss'>
+            <div id='error-text'>
+                <span>500</span>
+                <p style="color: lightyellow;">INTERNAL SERVER ERROR</p>
+                <br/>
+                <h6>服务器错误</h6>
+                <p class='hmpg'><a href='#' class="back">Back To Home</a></p>
+            </div>
+        </div>
+</div>
+
+
 </body>
 </html>
