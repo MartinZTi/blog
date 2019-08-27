@@ -1,8 +1,11 @@
 package com.mzt.service;
 
+import com.mzt.pojo.Tag;
 import com.mzt.pojo.Type;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * @version :1.0
@@ -25,5 +28,6 @@ public interface TypeService {
     //相同名称分类不得入库的  校验
     Type getTypeByName(String name);
 
+    List<Type> listType();
 
 }

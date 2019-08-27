@@ -36,7 +36,7 @@
 <div class="ui attached pointing menu">
     <div class="ui container">
         <div class="right menu">
-            <a href="#" class="item">发布</a>
+            <a href="#" th:href="@{/admin/blogs/input}" class="item">新增</a>
             <a href="#" class="teal active item">列表</a>
         </div>
     </div>
@@ -47,21 +47,29 @@
 <div class="m-container-small m-padded-tb-big">
     <div class="ui container">
         <!--查询表单-->
-        <form action="#" method="post" class="ui segment form">
+        <div  class="ui secondary segment form">
+            <!--注意点: 定义一个上下页跳转的隐藏域 让页面跳转的page.number 通过post来提交-->
+            <input type="hidden" name="page">
             <div class="inline fields">
                 <div class="field">
                     <input type="text" name="title" placeholder="标题">
                 </div>
                 <div class="field">
-                    <div class="ui selection dropdown">
-                        <input type="hidden" name="type">
-                        <i class="dropdown icon"></i>
-                        <div class="default text">分类</div>
-                        <div class="menu">
-                            <div class="item" data-value="1">错误日志</div>
-                            <div class="item" data-value="2">开发者手册</div>
+                    <div class="ui labeled action input">
+                        <div class="ui type selection dropdown">
+                            <input type="hidden" name="typeId">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">分类</div>
+                            <div class="menu">
+                                <div th:each="type : ${types}" class="item" data-value="1" th:data-value="${type.id}" th:text="${type.name}">错误日志</div>
+                                <!--/*-->
+                                <div class="item" data-value="2">开发者手册</div>
+                                <!--*/-->
+                            </div>
                         </div>
+                        <button class="ui clear compact button">clear</button>
                     </div>
+
                 </div>
                 <div class="field">
                     <div class="ui checkbox">
@@ -70,47 +78,60 @@
                     </div>
                 </div>
                 <div class="field">
-                    <button class="ui mini teal basic button"><i class="search icon"></i>搜索</button>
+                    <button type="button" id="search-btn" class="ui mini teal basic button"><i class="search icon"></i>搜索</button>
                 </div>
             </div>
-        </form>
+        </div>
 
-        <table class="ui celled table">
-            <thead>
-            <tr>
-                <th></th>
-                <th>标题</th>
-                <th>类型</th>
-                <th>推荐</th>
-                <th>更新时间</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td>刻意练习</td>
-                <td>认知升级</td>
-                <td>是</td>
-                <td>2018-10-02 09:45:05</td>
-                <td>
-                    <a href="#" class="ui mini basic teal button">编辑</a>
-                    <a href="#" class="ui mini basic red button">删除</a>
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <th colspan="6">
-                    <div class="ui mini pagination menu">
-                        <a class="item">上一页</a>
-                        <a class="item">下一页</a>
-                    </div>
-                    <a href="#" class="ui right floated mini teal basic button">新增</a>
-                </th>
-            </tr>
-            </tfoot>
-        </table>
+        <!--此处jQuary的load方法动态请求数据, 同样在controller方法/blog/search也是动态返回一个blogList局部片段-->
+        <div id="table-container">
+            <table th:fragment="blogList" class="ui compact teal table">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>标题</th>
+                    <th>类型</th>
+                    <th>推荐</th>
+                    <th>状态</th>
+                    <th>更新时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="blog,iterStat : ${page.content}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${blog.title}">刻意练习</td>
+                    <td th:text="${blog.type.name}">认知升级</td>
+                    <td th:text="${blog.recommend} ? '是':'否'">是</td>
+                    <td th:text="${blog.published} ? '发布':'草稿'">草稿</td>
+                    <td th:text="${blog.updateTime}">2018-10-02 09:45:05</td>
+                    <td>
+                        <a href="#" th:href="@{/admin/blogs/{id}/edit(id=${blog.id})}" class="ui mini basic teal button">编辑</a>
+                        <a href="#" th:href="@{/admin/blogs/{id}/delete(id=${blog.id})}" class="ui mini basic red button">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="7">
+                        <div class="ui mini pagination menu" th:if="${page.totalPages}>1">
+                            <!--点击上下页时, 动态的form表单的page隐藏域属性的值  post提交表单请求数据-->
+                            <a onclick="page(this)" th:attr="data-page=${page.number}-1 " th:unless="${page.first}" class="item">上一页</a>
+                            <a onclick="page(this)" th:attr="data-page=${page.number}+1 " th:unless="${page.last}"  class="item">下一页</a>
+                        </div>
+                        <a href="#" th:href="@{/admin/blogs/input}" class="ui right floated mini teal basic button">新增</a>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+
+            <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+                <i class="close icon"></i>
+                <div class="header">提示:</div>
+                <p th:text="${message}">恭喜, 操作成功!</p>
+            </div>
+
+        </div>
 
     </div>
 </div>
@@ -159,6 +180,8 @@
 <!--/*/</th:block>/*/-->
 
 <script>
+
+
     $(".menu.toggle").click(function () {
         $(".m-item").toggleClass("m-mobile-hide");
     });
@@ -170,6 +193,42 @@
     $('.ui.dropdown').dropdown({
         on: 'hover'
     });
+
+    function page(obj) {
+        $("[name='page']").val($(obj).data("page"));
+        loadDate();
+    }
+
+    //搜索按钮也是要调用loadDate方法来请求数据
+    $("#search-btn").click(function () {
+        $("[name='page']").val(0);
+        loadDate();
+    });
+
+    /*ajax请求部分页面   */
+    /*  thymeleaf模板写法, 斜线星号和两个中括号来定义要请求的地址  */
+    function loadDate() {
+        $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search",{
+            title : $("[name='title']").val(),
+            typeId : $("[name='typeId']").val(),
+            recommend : $("[name='recommend']").prop('checked'),
+            page : $("[name='page']").val()
+        });
+    }
+
+    //消息提示关闭初始化
+    $('.message .close')
+        .on('click', function () {
+            $(this).closest('.message')
+                .transition('fade');
+        });
+
+    $('.clear.button').on('click',function () {
+       $('.type.ui.dropdown').dropdown('clear');
+    });
+
+
+
 
 </script>
 </body>

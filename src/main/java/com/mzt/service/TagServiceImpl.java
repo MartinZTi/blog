@@ -10,6 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @version :1.0
  * @Author :29988
@@ -63,4 +66,30 @@ public class TagServiceImpl implements TagService {
     public Tag getTagByName(String name) {
       return tagDao.findByName(name);
     }
+
+    @Override
+    public List<Tag> listTag() {
+        return tagDao.findAll();
+    }
+
+    //根据多个id值的1,2,3,4的String字符串  得到list集合
+    @Override
+    public List<Tag> listTag(String ids) {  //1,2,3
+        return tagDao.findAllById(convertToList(ids));
+    }
+
+    private List<Long> convertToList(String ids){
+        List<Long> list = new ArrayList<Long>();
+        if(!"".equals(ids) && ids != null){
+            String[] idArray = ids.split(",");
+            for (int i = 0; i < idArray.length; i++) {
+                list.add(new Long(idArray[i]));
+            }
+        }
+        return list;
+    }
+
+
+
+
 }

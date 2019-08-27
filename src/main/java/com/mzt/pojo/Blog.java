@@ -19,6 +19,9 @@ public class Blog {
     @GeneratedValue
     private Long id;
     private String title;
+
+//    @Basic(fetch = FetchType.LAZY)
+//    @Lob
     private String content;
     private String firstPicture;
     private String flag;
@@ -49,6 +52,18 @@ public class Blog {
     //blog & comment 一对多
     @OneToMany(mappedBy = "blog")
     private List<Comment> comments = new ArrayList<>();
+
+
+    @Transient
+    private String tagIds;
+
+    public String getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(String tagIds) {
+        this.tagIds = tagIds;
+    }
 
 
 
@@ -86,8 +101,29 @@ public class Blog {
 
 
 
+    public void init(){
+        //把当前的tags的id数组转换成字符串 1,2,3,4格式提供给页面显示用
+        this.tagIds = tagsToIds(this.getTags());
+    }
 
+    private String tagsToIds(List<Tag> tags){
+        if(!tags.isEmpty()){
+            StringBuffer ids = new StringBuffer();
+            boolean flag = false;
+            for (Tag tag : tags) {
+                if(flag){
+                    ids.append(",");
+                }else {
+                    flag = true;
+                }
+                ids.append(tag.getId());
+            }
+            return ids.toString();
+        }else {
+            return tagIds;
+        }
 
+    }
 
 
     @Override

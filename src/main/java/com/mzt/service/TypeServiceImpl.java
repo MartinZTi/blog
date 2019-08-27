@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -66,5 +67,11 @@ public class TypeServiceImpl  implements  TypeService{
     public Type getTypeByName(String name) {
 
         return typeDao.findByName(name);
+    }
+
+    //blogs页面初始加载页面时,一并需要加载types
+    @Override
+    public List<Type> listType() {
+        return typeDao.findAll();
     }
 }

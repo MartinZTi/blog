@@ -4,6 +4,8 @@ import com.mzt.pojo.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * @version :1.0
  * @Author :29988
@@ -25,5 +27,8 @@ public interface TagService {
     //相同名称tag不得入库的  校验
     Tag getTagByName(String name);
 
+    List<Tag> listTag();
+
+    List<Tag> listTag(String ids);
 
 }
